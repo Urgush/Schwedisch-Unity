@@ -1,13 +1,17 @@
 using System.Data;
 using UnityEngine;
 using Mono.Data.Sqlite;
+using System;
+using TMPro;
 
 public class DBTest : MonoBehaviour
 {
-    // Start is called before the first frame update
+    string zeile;
+    public TextMeshProUGUI canvastext;
+
     void Start()
     {
-        string conn = "URI=file:" + Application.dataPath + "/Plugins/SQLite/Schwedisch.db"; //Path to database.
+        string conn = "URI=file:" + Application.dataPath + "/StreamingAssets/Schwedisch.db"; //Path to database.
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
@@ -20,7 +24,8 @@ public class DBTest : MonoBehaviour
             int value = reader.GetInt32(0);
             string name = reader.GetString(1);
 
-            Debug.Log("value= " + value + "  name =" + name );
+            Debug.Log("value= " + value + "  name =" + name);
+            zeile += value + " " + name + Environment.NewLine;
         }
         reader.Close();
         reader = null;
@@ -28,6 +33,8 @@ public class DBTest : MonoBehaviour
         dbcmd = null;
         dbconn.Close();
         dbconn = null;
-    }
+
+        canvastext.text = zeile;
+    } 
 }
 
